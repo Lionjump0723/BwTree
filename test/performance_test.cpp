@@ -577,7 +577,21 @@ void TestBwTreeEmailInsertPerformance(BwTree<std::string, long int> *t,
 
   std::cout << "stx::btree_multimap: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million email insertion/sec" << "\n";
-            
+
+  sl_map_gc<std::string, long int> slist;
+
+  //   << Insertion >>
+  
+  for(int i = 0;i < key_num;i++) {
+    slist.insert(std::make_pair(string_list[i], (long)i));
+  }
+
+  end = std::chrono::system_clock::now();
+
+  elapsed_seconds = end - start;
+
+  std::cout << "skiplist map: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+            << " million email insertion/sec" << "\n";
   return;
 }
 
