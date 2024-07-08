@@ -135,7 +135,7 @@ void skiplist_init(skiplist_raw *slist,
     // fanout 4 + layer 12: 4^12 ~= upto 17M items under O(lg n) complexity.
     // for +17M items, complexity will grow linearly: O(k lg n).
     slist->fanout = 4;
-    slist->max_layer = 12;
+    slist->max_layer = 20;
     slist->num_entries = 0;
 
     ALLOC_(atm_uint32_t, slist->layer_entries, slist->max_layer);

@@ -542,18 +542,18 @@ void TestBwTreeEmailInsertPerformance(BwTree<std::string, long int> *t,
   int key_num = counter;
   
   std::chrono::time_point<std::chrono::system_clock> start, end;
-  start = std::chrono::system_clock::now();
+  // start = std::chrono::system_clock::now();
 
-  for(int i = 0; i < key_num; i++) {
-    t->Insert(string_list[i], i);
-  }
+  // for(int i = 0; i < key_num; i++) {
+  //   t->Insert(string_list[i], i);
+  // }
 
-  end = std::chrono::system_clock::now();
+  // end = std::chrono::system_clock::now();
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "BwTree: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
-            << " million email insertion/sec" << "\n";
+  // std::cout << "BwTree: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  //           << " million email insertion/sec" << "\n";
             
   print_flag = true;
   delete t;
@@ -567,7 +567,7 @@ void TestBwTreeEmailInsertPerformance(BwTree<std::string, long int> *t,
 
   start = std::chrono::system_clock::now();
 
-  for(int i = 0;i < key_num;i++) {
+  for(int i = 0; i < key_num; i++) {
     bt.insert(string_list[i], i);
   }
 
@@ -581,135 +581,60 @@ void TestBwTreeEmailInsertPerformance(BwTree<std::string, long int> *t,
   sl_map_gc<std::string, long int> slist;
 
   //   << Insertion >>
+  std::pair<std::string, long int> *pairs = new std::pair<std::string, long int>[key_num];
+  for (int i = 0; i < key_num; i++) pairs[i] = std::make_pair(string_list[i], (long)i);
+
+  start = std::chrono::system_clock::now();
   
-  for(int i = 0;i < key_num;i++) {
-    slist.insert(std::make_pair(string_list[i], (long)i));
+  for(int i = 0; i < key_num; i++) {
+    slist.insert(pairs[i]);
+  }
+
+  end = std::chrono::system_clock::now();
+  delete[] pairs;
+
+  elapsed_seconds = end - start;
+
+  std::cout << "skiplist map: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+            << " million email insertion/sec" << "\n";
+  
+  std::map<std::string, long int> m{};
+
+  start = std::chrono::system_clock::now();
+
+  for(int i = 0; i < key_num; i++) {
+    m.insert({string_list[i], i});
   }
 
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
 
-  std::cout << "skiplist map: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
-            << " million email insertion/sec" << "\n";
-  return;
-}
-
-/*
- * TestStdMapEmailInsertPerformance() - Tests insert performance on string
- *                                      workload (email)
- *
- * This function requires a special email file that is not distributed
- * publicly
- */
-void TestStdMapEmailInsertPerformance(std::map<std::string, long int> *t,
-                                 std::string filename) {
-  std::ifstream email_file{filename};
-  
-  std::vector<std::string> string_list{};
-  
-  // If unable to open file
-  if(email_file.good() == false) {
-    std::cout << "Unable to open file: " << filename << std::endl;
-    
-    return;
-  }
-  
-  int counter = 0;
-  std::string s{};
-  
-  // Then load the line until reaches EOF
-  while(std::getline(email_file, s).good() == true) {
-    string_list.push_back(s);
-    
-    counter++;
-  }
-    
-  printf("Successfully loaded %d entries\n", counter);
-  
-  ///////////////////////////////////////////////////////////////////
-  // After this point we continue with insertion
-  ///////////////////////////////////////////////////////////////////
-  
-  int key_num = counter;
-  
-  std::chrono::time_point<std::chrono::system_clock> start, end;
-  start = std::chrono::system_clock::now();
-
-  for(int i = 0; i < key_num; i++) {
-    t->insert({string_list[i], i});
-  }
-
-  end = std::chrono::system_clock::now();
-
-  std::chrono::duration<double> elapsed_seconds = end - start;
-
   std::cout << "std::map: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million email insertion/sec" << "\n";
             
-  print_flag = true;
-  delete t;
-  print_flag = false;
-            
-  return;
-}
-
-/*
- * TestStdMapEmailInsertPerformance() - Tests insert performance on string
- *                                      workload (email)
- *
- * This function requires a special email file that is not distributed
- * publicly
- */
-void TestARTEmailInsertPerformance(ARTType *t, std::string filename) {
-  std::ifstream email_file{filename};
-  
-  std::vector<std::string> string_list{};
-  
-  // If unable to open file
-  if(email_file.good() == false) {
-    std::cout << "Unable to open file: " << filename << std::endl;
-    
-    return;
-  }
-  
-  int counter = 0;
-  std::string s{};
-  
-  // Then load the line until reaches EOF
-  while(std::getline(email_file, s).good() == true) {
-    string_list.push_back(s);
-    
-    counter++;
-  }
-    
-  printf("Successfully loaded %d entries\n", counter);
-  
-  ///////////////////////////////////////////////////////////////////
-  // After this point we continue with insertion
-  ///////////////////////////////////////////////////////////////////
-  
-  int key_num = counter;
+  ARTType at;
+  art_tree_init(&at);
 
   long int* array = new long int[key_num];
   for (int i = 0; i < key_num; i++) array[i] = i;
   
-  std::chrono::time_point<std::chrono::system_clock> start, end;
+  // std::chrono::time_point<std::chrono::system_clock> start, end;
   start = std::chrono::system_clock::now();
 
   for (int i = 0; i < key_num; i++) {
-    art_insert(t, (unsigned char*)string_list[i].c_str(), string_list[i].size(), array + i);
+    art_insert(&at, (unsigned char*)string_list[i].c_str(), string_list[i].size(), array + i);
   }
 
   end = std::chrono::system_clock::now();
 
-  std::chrono::duration<double> elapsed_seconds = end - start;
+  elapsed_seconds = end - start;
 
   std::cout << "art_tree: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million email insertion/sec" << "\n";
             
   print_flag = true;
-  art_tree_destroy(t);
+  art_tree_destroy(&at);
   print_flag = false;
   delete[] array;
             
