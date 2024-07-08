@@ -999,6 +999,10 @@ void BenchmarkARTZipfRead(ARTType *t,
 
 void TestBwTreeEmailInsertPerformance(BwTree<std::string, long int> *t, std::string filename);
 
+void TestStdMapEmailInsertPerformance(std::map<std::string, long int> *t, std::string filename);
+
+void TestARTEmailInsertPerformance(ARTType *t, std::string filename);
+
 /*
  * Stress test suite
  */

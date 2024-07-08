@@ -39,7 +39,7 @@ void BenchmarkARTSeqInsert(ARTType *t,
     // Declare timer and start it immediately
     Timer timer{true};
 
-    for(long int i = start_key;i < end_key;i++) {
+    for(long int i = start_key; i < end_key; i++) {
       // 8 byte key, 8 byte payload (i.e. int *)
       // Since ART itself does not store data, we must allocate an external
       // array which occupies extra space, and also this adds one extra

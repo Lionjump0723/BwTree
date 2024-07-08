@@ -52,7 +52,7 @@ BTreeType *GetEmptyBTree() {
  * tree destruction under debug mode
  */
 void DestroyTree(TreeType *t, bool no_print) {
-  if(no_print == false) {
+  if (no_print == false) {
     print_flag = true;
   }
   

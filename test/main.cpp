@@ -100,10 +100,21 @@ int main(int argc, char **argv) {
   
   if(run_email_test == true) {
     auto t2 = new BwTree<std::string, long int>{true};
-    
+    t2->UpdateThreadLocal(1);
+    t2->AssignGCID(0);
+
     TestBwTreeEmailInsertPerformance(t2, "emails_dump.txt");
     
     // t2 has already been deleted for memory reason
+
+    auto t3 = new std::map<std::string, long int>();
+
+    TestStdMapEmailInsertPerformance(t3, "emails_dump.txt");
+
+    ARTType t4;
+    art_tree_init(&t4);
+
+    TestARTEmailInsertPerformance(&t4, "emails_dump.txt");
   }
 
   if(run_epoch_test == true) {

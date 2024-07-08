@@ -563,7 +563,7 @@ class BwTreeBase {
     uint64_t min_epoch = GetGCMetaData(0)->last_active_epoch;
     
     // This might not be executed if there is only one thread
-    for(int i = 1;i < static_cast<int>(thread_num);i++) {
+    for(int i = 1; i < static_cast<int>(thread_num); i++) {
       // Note: std::min pass a const & of into the function. We need to first copy the shared GetGCMetaData(i)->last_active_epoch
       // into a local variable before calling std::min. Otherwise we will have a Heisenbug where std::min first check which one is smaller,
       // and before it returns, other thread modify the variable and we actually return the larger one.
@@ -2739,11 +2739,11 @@ class BwTree : public BwTreeBase {
   void ClearThreadLocalGarbage() {
     // First of all we should set all last active counter to -1 to
     // guarantee progress to clear all epoches
-    for(size_t i = 0;i < GetThreadNum();i++) {
+    for(size_t i = 0; i < GetThreadNum(); i++) {
       UnregisterThread(i);
     }
     
-    for(size_t i = 0;i < GetThreadNum();i++) {
+    for(size_t i = 0; i < GetThreadNum(); i++) {
       // Here all epoch counters have been set to 0xFFFFFFFFFFFFFFFF
       // so GC should always succeed
       PerformGC(i);
@@ -7358,6 +7358,7 @@ before_switch:
     #endif
 
     EpochNode *epoch_node_p = epoch_manager.JoinEpoch();
+    bwt_printf("JoinEpoch called\n");
 
     while(1) {
       Context context{key};
@@ -7370,7 +7371,7 @@ before_switch:
       const KeyValuePair *item_p = Traverse(&context, &value, &index_pair);
 
       // If the key-value pair already exists then return false
-      if(item_p != nullptr) {
+      if (item_p != nullptr) {
         epoch_manager.LeaveEpoch(epoch_node_p);
 
         return false;
