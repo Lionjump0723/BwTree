@@ -14,6 +14,9 @@ all: main
 main: $(OBJ)
 	$(CXX) $(OBJ) -o ./main $(CXX_FLAG) $(OPT_FLAG) $(GMON_FLAG)
 
+generate_email: ./build/generate_email.o
+	$(CXX) ./build/generate_email.o -o ./generate_email $(CXX_FLAG) $(OPT_FLAG)
+
 ./build/main.o: $(SRC) ./src/bwtree.h
 	$(CXX) ./test/main.cpp -c -o ./build/main.o $(CXX_FLAG) $(OPT_FLAG) $(GMON_FLAG)
 
@@ -56,9 +59,11 @@ main: $(OBJ)
 ./build/misc_test.o: ./test/misc_test.cpp ./src/bwtree.h
 	$(CXX) ./test/misc_test.cpp -c -o ./build/misc_test.o $(CXX_FLAG) $(OPT_FLAG) $(GMON_FLAG)
 
-
 ./build/spinlock.o:
 	$(CXX) ./benchmark/spinlock/spinlock.cpp -c -o ./build/spinlock.o $(CXX_FLAG) $(OPT_FLAG) $(GMON_FLAG)
+
+./build/generate_email.o:
+	$(CXX) ./test/generate_email.cpp -c -o ./build/generate_email.o $(CXX_FLAG) $(OPT_FLAG) $(GMON_FLAG)
 
 gprof:
 	make clean
@@ -105,6 +110,9 @@ email-test: main
 mixed-test: main
 	$(PRELOAD_LIB) ./main --mixed-test
 
+generate: generate_email
+	./generate_email --key-num 100 --key-length 10 --filename emails_dump.txt
+
 prepare:
 	mkdir -p build
 	mkdir -p ./stl_test/bin
@@ -113,4 +121,5 @@ clean:
 	rm -f ./build/*
 	rm -f *.log
 	rm -f ./main
+	rm -f ./generate_email
 	

@@ -34,6 +34,7 @@
 
 # Misc
 main
+generate_email
 *.log
 *.txt
 *.doc
@@ -43,3 +44,5 @@ main
 
 bin
 build
+
+.vscode
