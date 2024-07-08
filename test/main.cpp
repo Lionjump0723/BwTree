@@ -100,7 +100,8 @@ int main(int argc, char **argv) {
   
   if(run_email_test == true) {
     auto t2 = new BwTree<std::string, long int>{true};
-    
+    t2->UpdateThreadLocal(1);
+    t2->AssignGCID(0);
     TestBwTreeEmailInsertPerformance(t2, "emails_dump.txt");
     
     // t2 has already been deleted for memory reason
