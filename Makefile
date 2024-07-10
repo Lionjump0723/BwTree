@@ -114,7 +114,7 @@ mixed-test: main
 	$(PRELOAD_LIB) ./main --mixed-test
 
 generate: generate_email
-	./generate_email --key-num 200000 --key-length 100 --filename emails_dump.txt
+	./generate_email --key-num 250000 --key-length 100 --key-type random --filename emails_dump.txt
 
 prepare:
 	mkdir -p build
